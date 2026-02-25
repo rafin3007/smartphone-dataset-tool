@@ -75,4 +75,28 @@ if final_model_name:
                 f.write(f"brand: {brand}\nmodel: {final_model_name}\ndate: 2020-2024")
                 
             st.success(f"Successfully saved to {final_model_name} folder!")
+
             st.balloons()
+
+
+
+import os
+
+def save_to_dataset(image_obj, model_id, model_name, split="train"):
+    # 1. Define Paths
+    base_path = f"dataset/{split}"
+    img_dir = os.path.join(base_path, "images")
+    lbl_dir = os.path.join(base_path, "labels")
+    os.makedirs(img_dir, exist_ok=True)
+    os.makedirs(lbl_dir, exist_ok=True)
+
+    # 2. Generate Unique Filename
+    filename = f"{model_name}_{int(time.time())}"
+    
+    # 3. Save Image
+    image_obj.save(os.path.join(img_dir, f"{filename}.jpg"))
+    
+    # 4. Save Label (Placeholder: Full-image box)
+    # This creates a box covering the whole image until you manually annotate
+    with open(os.path.join(lbl_dir, f"{filename}.txt"), "w") as f:
+        f.write(f"{model_id} 0.5 0.5 1.0 1.0")
